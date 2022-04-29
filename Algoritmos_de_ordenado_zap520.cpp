@@ -2,11 +2,13 @@
 //
 
 #include <iostream>
+#include<locale.h>
+#include<locale>
 using namespace std;
 
 int numeros[6] = { 10,4,6,8,1,3 };
 int i, j, aux, pos;
-auto numeros_size = sizeof(numeros) / sizeof(numeros[0]);
+unsigned int numeros_size = sizeof(numeros) / sizeof(numeros[0]);
 
 void menu()
 {
@@ -122,7 +124,7 @@ void merge(int numeros[], int const izq, int const enmedio, int const der)
         indexOfMergedArray++;
     }
 }
- 
+
 
 void mergeSort(int array[], int const begin, int const end)
 {
@@ -136,132 +138,194 @@ void mergeSort(int array[], int const begin, int const end)
 }
 
 
-void printArray(int A[], int size)
+void printArray(int _numeros[], int size)
 {
     for (auto i = 0; i < size; i++)
-        cout << A[i] << " ";
+        cout << _numeros[i] << " ";
+}
+
+void heapify(int array[], int n, int m) {
+    
+    int largest = m;
+    int izq = 2 * m + 1;
+    int der = 2 * m + 2;
+
+    if (izq < n && array[izq] > array[largest])
+        largest = izq;
+
+    if (der < n && array[der] > array[largest])
+        largest = der;
+
+  
+    if (largest != m) {
+        swap(array[m], array[largest]);
+        heapify(array, n, largest);
+    }
+}
+
+
+void heapSort(int array[], int n) {
+    
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(array, n, i);
+
+  
+    for (int i = n - 1; i >= 0; i--) {
+        swap(array[0], array[i]);
+
+        heapify(array, i, 0);
+    }
 }
 
 int main()
 {
-    system("color 0B");
     
+    system("color 0B");
+
     bool ejecucion = true;
     int opc = 0;
     do
     {
         menu();
         cin >> opc;
-    switch (opc)
-    {
-    case 1:
-        cout << " has elegido el metodo de la burbuja" << endl;
-        system("cls");
-        cout << " El arreglo que se va a ordenar" << endl;
-        for (i = 0; i < 6; i++)
+        switch (opc)
         {
-            cout << i << " -->" << numeros[i] << endl;
-        }
+        case 1:
+            cout << " has elegido el metodo de la burbuja" << endl;
+            system("cls");
+            cout << " El arreglo que se va a ordenar" << endl;
+            for (i = 0; i < 6; i++)
+            {
+                cout << i << " -->" << numeros[i] << endl;
+            }
 
-        for (i = 0; i < 6; i++) {
-            for (j = 0; j < 5; j++) {
-                if (numeros[j] > numeros[j + 1]) {
-                    aux = numeros[j];
-                    numeros[j] = numeros[j + 1];
-                    numeros[j + 1] = aux;
+            for (i = 0; i < 6; i++) {
+                for (j = 0; j < 5; j++) {
+                    if (numeros[j] > numeros[j + 1]) {
+                        aux = numeros[j];
+                        numeros[j] = numeros[j + 1];
+                        numeros[j + 1] = aux;
+                    }
                 }
             }
-        }
 
-        cout << "Numeros Ordenados ";
-        for (i = 0; i < 5; i++) {
-            cout << numeros[i] << " ";
-        }
-        cout << endl << endl;
-        break;
-    case 2:
-        cout << " has elegido el metodo de insercion" << endl;
-        system("cls");
-
-        cout << " El arreglo que se va a ordenar" << endl;
-        for (i = 0; i < 6; i++)
-        {
-            cout << i << " -->" << numeros[i] << endl;
-        }
-
-        for (i = 0; i < 6; i++) {
-            pos = i;
-            aux = numeros[i];
-
-            while ((pos > 0) && (numeros[pos - 1] > aux)) {
-                numeros[pos] = numeros[pos - 1];
-                pos--;
+            cout << "Numeros Ordenados ";
+            for (i = 0; i < 5; i++) {
+                cout << numeros[i] << " ";
             }
-            numeros[pos] = aux;
+            cout << endl << endl;
+            break;
+        case 2:
+            cout << " has elegido el metodo de insercion" << endl;
+            system("cls");
+
+            cout << " El arreglo que se va a ordenar" << endl;
+            for (i = 0; i < 6; i++)
+            {
+                cout << i << " -->" << numeros[i] << endl;
+            }
+
+            for (i = 0; i < 6; i++) {
+                pos = i;
+                aux = numeros[i];
+
+                while ((pos > 0) && (numeros[pos - 1] > aux)) {
+                    numeros[pos] = numeros[pos - 1];
+                    pos--;
+                }
+                numeros[pos] = aux;
+            }
+
+            cout << "Numeros ordenados ";
+            for (i = 0; i < 6; i++) {
+                cout << numeros[i] << " ";
+            }
+            cout << endl << endl;
+            break;
+        case 3:
+            cout << " has elegido el metodo de la quicksort" << endl;
+            system("cls");
+
+            cout << " El arreglo que se va a ordenar" << endl;
+            for (i = 0; i < 6; i++)
+            {
+                cout << i << " -->" << numeros[i] << endl;
+            }
+
+
+            quicksort(numeros, 0, 6 - 1);
+
+            cout << "Numeros ordenados ";
+            for (int i = 0; i < 6; i++)
+            {
+                cout << numeros[i] << " ";
+            }
+            cout << endl;
+            cout << endl << endl;
+            break;
+        case 4:
+            cout << " has elegido el metodo de la mergesort" << endl;
+            system("cls");
+            cout << " El arreglo que se va a ordenar" << endl;
+
+            for (i = 0; i < 6; i++)
+            {
+                cout << i << " -->" << numeros[i] << endl;
+            }
+            mergeSort(numeros, 0, numeros_size - 1);
+            cout << "Numeros ordenados ";
+            printArray(numeros, numeros_size);
+            cout << endl << endl;
+            break;
+        case 5:
+            cout << " has elegido el metodo de la heapsort" << endl;
+            system("cls");
+            cout << " El arreglo que se va a ordenar" << endl;
+
+            for (i = 0; i < 6; i++)
+            {
+                cout << i << " -->" << numeros[i] << endl;
+            }
+
+            heapSort(numeros, numeros_size);
+            cout << "Numeros ordenados ";
+            printArray(numeros, numeros_size);
+            
+            cout << endl << endl;
+            break;
+        case 6:
+            if (ejecucion == true)
+            {
+                ejecucion = false;
+            }
+            cout << " saliendo..." << endl;
+            break;
+
+        default:
+            cout << " Elige una opcion " << endl;
+            
+            cout << " ⢀⡴⠑⡄⠀⠀⠀⠀⠀⠀⠀⣀⣀⣤⣤⣤⣀⡀⠀"<< endl;
+            cout << " ⠸⡇⠀⠿⡀⠀⠀⠀⣀⡴⢿⣿⣿⣿⣿⣿⣿⣿⣷⣦⡀" << endl;
+            cout << " ⠀⠀⠑⢄⣠⠾⠁⣀⣄⡈⠙⣿⣿⣿⣿⣿⣿⣿⣿⣆" << endl;
+            cout << " ⠀⠀ ⢀⡀⠁⠀⠀⠈⠙⠛⠂⠈⣿⣿⣿⣿⣿⠿⡿⢿⣆" << endl;
+            cout << " ⠀ ⢀⡾⣁⣀⠀⠴⠂⠙⣗⡀⠀⢻⣿⣿⠭⢤⣴⣦⣤⣹⠀⠀⠀⢀⢴⣶⣆ " << endl;
+            cout << " ⠀⢀⣾⣿⣿⣿⣷⣮⣽⣾⣿⣥⣴⣿⣿⡿⢂⠔⢚⡿⢿⣿⣦⣴⣾⠁⠸⣼⡿" << endl;
+            cout << " ⢀⡞⠁⠙⠻⠿⠟⠉⠀⠛⢹⣿⣿⣿⣿⣿⣌⢤⣼⣿⣾⣿⡟⠉" << endl;
+            cout << " ⣾⣷⣶⠇⠀⠀⣤⣄⣀⡀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇" << endl;
+            cout << " ⠉⠈⠉⠀⢦⡈⢻⣿⣿⣿⣶⣶⣶⣶⣤⣽⡹⣿⣿⣿⣿⡇" << endl;
+            cout << "⠀⠀     ⠉⠲⣽⡻⢿⣿⣿⣿⣿⣿⣿⣷⣜⣿⣿⣿⡇" << endl;
+            cout << " ⠀      ⢸⣿⣿⣷⣶⣮⣭⣽⣿⣿⣿⣿⣿⣿⣿" << endl;
+            cout << " ⠀    ⣀⣀⣈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇" << endl; 
+            cout << "      ⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃" << endl;
+            cout << "⠀      ⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠁" << endl;
+            cout << "         ⠉⠛⠻⠿⠿⠿⠿⠛⠉" << endl;
+            
+            break;
         }
-
-        cout << "Numeros ordenados ";
-        for (i = 0; i < 6; i++) {
-            cout << numeros[i] << " ";
-        }
-        cout << endl << endl;
-        break;
-    case 3:
-        cout << " has elegido el metodo de la quicksort" << endl;
-        system("cls");
-
-        cout << " El arreglo que se va a ordenar" << endl;
-        for (i = 0; i < 6; i++)
-        {
-            cout << i << " -->" << numeros[i] << endl;
-        }
-        
-
-        quicksort(numeros, 0, 6 - 1);
-
-        cout << "Numeros ordenados ";
-        for (int i = 0; i < 6; i++) 
-        {
-            cout << numeros[i] << " ";
-        }
-        cout << endl;
-        cout << endl << endl;
-        break;
-    case 4:
-        cout << " has elegido el metodo de la mergesort" << endl;
-        system("cls");
-        cout << " El arreglo que se va a ordenar" << endl;
-
-        for (i = 0; i < 6; i++)
-        {
-            cout << i << " -->" << numeros[i] << endl;
-        }
-        mergeSort(numeros, 0, numeros_size - 1);
-        cout << "Numeros ordenados ";
-        printArray(numeros, numeros_size);
-        cout << endl << endl;
-        break;
-    case 5:
-        cout << " has elegido el metodo de la heapsort" << endl;
-        system("cls");
-
-
-        cout << endl << endl;
-        break;
-    case 6:
-        if (ejecucion == true)
-        {
-            ejecucion = false;
-        }
-        cout << " saliendo..." << endl;
-        break;
-
-    default:
-        break;
-    }
+        setlocale(LC_ALL, "");
     } while (ejecucion == true);
 
 
-
 }
+
 
